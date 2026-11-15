@@ -1,4 +1,7 @@
 import 'package:args/args.dart';
+import 'package:fints_cli/config/ft_config.dart';
+import 'package:fints_cli/engine/fints_client.dart';
+import 'package:logging/logging.dart';
 
 const String version = '0.0.1';
 
@@ -16,7 +19,11 @@ ArgParser buildParser() {
       negatable: false,
       help: 'Show additional command output.',
     )
-    ..addFlag('version', negatable: false, help: 'Print the tool version.');
+    ..addFlag(
+      'version',
+      negatable: false,
+      help: 'Print the tool version.',
+    );
 }
 
 void printUsage(ArgParser argParser) {
@@ -24,7 +31,14 @@ void printUsage(ArgParser argParser) {
   print(argParser.usage);
 }
 
-void main(List<String> arguments) {
+void main(List<String> arguments) async {
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    print(
+      '${record.level.name}: ${record.time}: ${record.message}',
+    );
+  });
+  final logger = Logger("main");
   final ArgParser argParser = buildParser();
   try {
     final ArgResults results = argParser.parse(arguments);
@@ -43,10 +57,16 @@ void main(List<String> arguments) {
       verbose = true;
     }
 
+    logger.log(.FINE, "running fints ...");
+    await MyFinTs(FtConfig()).run();
+    logger.log(.FINE, "done");
+
     // Act on the arguments provided.
     print('Positional arguments: ${results.rest}');
     if (verbose) {
-      print('[VERBOSE] All arguments: ${results.arguments}');
+      print(
+        '[VERBOSE] All arguments: ${results.arguments}',
+      );
     }
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
