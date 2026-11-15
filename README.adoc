@@ -10,7 +10,8 @@ Nutzer damit einverstanden, dass es **sein persönliches Risiko** ist und
 **ich nicht hafte**.
 
 Bisher funktioniert die Abfrage bei meinem Postbank-Depot und bei meinem Postbank-Anlagekonto.
-Bei meinem Postbank-Girokonto funktioniert es dagegen nicht.
+Bei meinem Postbank-Girokonto funktioniert es dagegen nicht. Bei der DKB ist zwingend eine
+Produktregistrierung erforderlich siehe https://www.fints.org/de/hersteller/produktregistrierung.
 
 ## Benutzung während der Entwicklung
 
@@ -26,3 +27,8 @@ Man muss eine .env anlegen mit den aus link:.env.example[] ersichtlichen Variabl
   * CSV
   * JSON
   * wahlweise in Datei(en)
+* Nachfragen während des Laufs vermeiden, indem entsprechende Optionen
+  beim Start gesetzt werden
+
+* Wenn die Basis, die Dart-Library https://pub.dev/packages/fints[fints] es unterstützt,
+  sollen auch Überweisungen ermöglicht werden (vielleicht auch Lastschriften).

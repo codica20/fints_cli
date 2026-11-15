@@ -38,10 +38,13 @@ class FtConfig {
     }
   }
 
+  /// Do NOT use this variable! Use _dotenv instead!
+  static DotEnv? _globalDotenv;
+
   static DotEnv get _dotenv {
-    // TODO: use singleton pattern
-    final env = DotEnv(includePlatformEnvironment: true)
-      ..load();
-    return env;
+    _globalDotenv ??= DotEnv(
+        includePlatformEnvironment: true,
+      )..load();
+    return _globalDotenv!;
   }
 }
