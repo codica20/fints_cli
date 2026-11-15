@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cli_menu/cli_menu.dart';
 import 'package:fints/fints.dart';
 import 'package:fints_cli/config/ft_config.dart';
 import 'package:logging/logging.dart';
@@ -8,6 +9,10 @@ class MyFinTs(final FtConfig config) {
   final Logger l = Logger("MyFinTs");
   void _info(String msg) {
     l.info(msg);
+  }
+
+  void _fine(String msg) {
+    l.fine(msg);
   }
 
   /// rethrows the exception
@@ -26,8 +31,8 @@ class MyFinTs(final FtConfig config) {
       ),
       pin: config.pin,
       options: FinTsClientOptions(
-        logger: (direction, message) {
-          _info("Direction: $direction - Msg: $message");
+        logger: (MessageDirection direction, message) {
+          _fine(" ${direction.name} - Msg: $message");
         },
         state: null, //savedState, // from a previous session, or null
         tanMethodSelector: (methods) =>
@@ -60,15 +65,21 @@ class MyFinTs(final FtConfig config) {
 
     try {
       final accounts = await client.getAccounts();
-      final balance = await client.getBalance(
-        accounts.first,
-      );
+      final account = Menu(accounts).choose().value;
+      final balance = await client.getBalance(account);
       _info("balance: $balance");
+      _info(
+        "balance-details: ${balance.booked} ${balance.pending} ${balance.bookedAsOf} ${balance.available} ${balance.creditLine} ${balance.overdraft} ${balance.used} ${balance.bookedAsOfTime} ${balance.productName}",
+      );
+
+      const daysMenu = [1, 5, 10, 30, 90, 180];
+      final int days =
+          daysMenu[Menu(
+            daysMenu.map((count) => "Letzte $count Tage"),
+          ).choose().index];
       final transactions = await client.getTransactions(
-        accounts.first,
-        from: DateTime.now().subtract(
-          const Duration(days: 90),
-        ),
+        account,
+        from: DateTime.now().subtract(Duration(days: days)),
       );
       _info("transactions: $transactions");
       final depot = accounts
@@ -77,6 +88,7 @@ class MyFinTs(final FtConfig config) {
           )
           .firstOrNull;
       if (depot != null) {
+        _info("Checking depot: $depot");
         final HoldingsStatement(:holdings, :total) =
             await client.getHoldings(depot);
         _info("depot total: $total - holdings: $holdings");
@@ -100,7 +112,7 @@ class MyFinTs(final FtConfig config) {
       try {
         await client.close();
       } finally {
-        _info(
+        _fine(
           "Client state at end of run: ${client.state}",
         );
         // savedState = client.state; // persist after close, whose answers may change it
@@ -112,14 +124,27 @@ class MyFinTs(final FtConfig config) {
     List<TanMethod> methods,
   ) async {
     _info("method picker: $methods");
-    throw UnimplementedError();
+    final userinput = Menu(methods).choose();
+    _info("Picked: $userinput");
+    final result = userinput.value;
+    return result;
   }
 
   FutureOr<TanMedium> showMediumPicker(
     List<TanMedium> media,
   ) async {
-    _info("medium picker: $media");
-    throw UnimplementedError();
+    _fine("medium picker: $media");
+    for (final medium in media) {
+      _fine(
+        "$medium - ${medium.name} ${medium.isActive} ${medium.validFrom} ${medium.securityFunction}  ${medium.cardSequenceNumber} ${medium.status} ${medium.mobileNumber} ${medium.lastUsed} ${medium.cardNumber}",
+      );
+    }
+    final mediumNames = media.map((m) => m.name);
+    final userinput = Menu(mediumNames).choose();
+    _info(
+      "Picked: ${userinput.value} - ${userinput.index} - ${media[userinput.index]}",
+    );
+    return media[userinput.index];
   }
 
   void showNotice(String subject, String text) {

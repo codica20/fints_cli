@@ -32,7 +32,6 @@ void printUsage(ArgParser argParser) {
 }
 
 void main(List<String> arguments) async {
-  Logger.root.level = Level.ALL; // defaults to Level.INFO
   Logger.root.onRecord.listen((record) {
     print(
       '${record.level.name}: ${record.time}: ${record.message}',
@@ -57,21 +56,17 @@ void main(List<String> arguments) async {
       verbose = true;
     }
 
+    Logger.root.level = verbose ? Level.ALL : .INFO;
+
     logger.log(.FINE, "running fints ...");
     await MyFinTs(FtConfig()).run();
     logger.log(.FINE, "done");
-
-    // Act on the arguments provided.
-    print('Positional arguments: ${results.rest}');
-    if (verbose) {
-      print(
-        '[VERBOSE] All arguments: ${results.arguments}',
-      );
-    }
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
     print(e.message);
     print('');
     printUsage(argParser);
+  } catch (e, s) {
+    logger.severe("In main: $e !!!", e, s);
   }
 }

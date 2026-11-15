@@ -9,6 +9,7 @@ environment:
 # Add regular dependencies here.
 dependencies:
   args: ^2.7.0
+  cli_menu: ^0.4.0+1
   dotenv: ^4.2.0
   fints: ^0.4.0
   logging: ^1.3.0
