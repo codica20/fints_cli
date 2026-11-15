@@ -1,7 +1,8 @@
 name: fints_cli
-description: A sample command-line application with basic argument parsing.
-version: 0.0.1
-# repository: https://github.com/my_org/my_repo
+description: get balances, transactions and holdings via FinTS
+
+# Please, set it to the same value as in bin/fints_cli.dart
+version: 0.0.2
 
 environment:
   sdk: ^3.13.7

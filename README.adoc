@@ -1,0 +1,28 @@
+# FinTS-Cli
+Ein App für die Kommandozeile, um Kontostände und Transaktionen über FinTS abzufragen
+:toc:
+:toc-title: Inhaltsverzeichnis
+:toclevels: 5
+
+Diese App ist eigentlich nur für meine persönlichen Zwecke, könnte aber
+auch für andere nützlich sein. Mit Nutzung dieser App, erklärt sich der 
+Nutzer damit einverstanden, dass es **sein persönliches Risiko** ist und 
+**ich nicht hafte**.
+
+Bisher funktioniert die Abfrage bei meinem Postbank-Depot und bei meinem Postbank-Anlagekonto.
+Bei meinem Postbank-Girokonto funktioniert es dagegen nicht.
+
+## Benutzung während der Entwicklung
+
+Man muss eine .env anlegen mit den aus link:.env.example[] ersichtlichen Variablen.
+
+```bash
+  dart run bin/fints_cli.dart [--verbose]
+```
+
+## Roadmap
+
+* Schönerer Output
+  * CSV
+  * JSON
+  * wahlweise in Datei(en)

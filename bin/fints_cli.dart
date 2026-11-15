@@ -3,7 +3,8 @@ import 'package:fints_cli/config/ft_config.dart';
 import 'package:fints_cli/engine/fints_client.dart';
 import 'package:logging/logging.dart';
 
-const String version = '0.0.1';
+// Please, set it to the same value as in pubspec.yaml
+const String version = '0.0.2';
 
 ArgParser buildParser() {
   return ArgParser()

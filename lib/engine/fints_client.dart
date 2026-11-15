@@ -82,6 +82,11 @@ class MyFinTs(final FtConfig config) {
         from: DateTime.now().subtract(Duration(days: days)),
       );
       _info("transactions: $transactions");
+      for (final Transaction transaction in transactions) {
+        _info(
+          "${transaction.bookingDate} ${transaction.amount} ${transaction.bookingText} ${transaction.counterpartyName} ${transaction.counterpartyIban} ${transaction.originalAmount} ${transaction.isPending ? "Pending" : "-"} ${transaction.purpose} ${transaction.purposeCodes} ${transaction.valueDate}",
+        );
+      }
       final depot = accounts
           .where(
             (a) => a.category == AccountCategory.securities,
@@ -92,6 +97,11 @@ class MyFinTs(final FtConfig config) {
         final HoldingsStatement(:holdings, :total) =
             await client.getHoldings(depot);
         _info("depot total: $total - holdings: $holdings");
+        for (final holding in holdings) {
+          _info(
+            "${holding.name} ${holding.marketValue} ${holding.marketValue} ${holding.acquisitionPrice} ${holding.quantity} ${holding.wkn} ${holding.isin} ${holding.priceDate} ${holding.priceTime} ${holding.priceKind}",
+          );
+        }
       }
     } on FinTsLoginDataChangedException catch (e, s) {
       _error(e, s);
