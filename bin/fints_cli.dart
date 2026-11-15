@@ -1,4 +1,4 @@
-import 'package:args/args.dart';
+import 'package:config/config.dart';
 import 'package:fints_cli/config/ft_config.dart';
 import 'package:fints_cli/engine/fints_client.dart';
 import 'package:logging/logging.dart';
@@ -6,8 +6,8 @@ import 'package:logging/logging.dart';
 // Please, set it to the same value as in pubspec.yaml
 const String version = '0.0.2';
 
-ArgParser buildParser() {
-  return ArgParser()
+ConfigParser buildParser() {
+  return ConfigParser()
     ..addFlag(
       'help',
       abbr: 'h',
@@ -27,8 +27,8 @@ ArgParser buildParser() {
     );
 }
 
-void printUsage(ArgParser argParser) {
-  print('Usage: dart fints_cli.dart <flags> [arguments]');
+void printUsage(ConfigParser argParser) {
+  print('Usage: fints_cli <flags> [arguments]');
   print(argParser.usage);
 }
 
@@ -39,14 +39,14 @@ void main(List<String> arguments) async {
     );
   });
   final logger = Logger("main");
-  final ArgParser argParser = buildParser();
+  final ConfigParser configParser = buildParser();
   try {
-    final ArgResults results = argParser.parse(arguments);
+    final  results = configParser.parse(arguments);
     bool verbose = false;
 
     // Process the parsed arguments.
     if (results.flag('help')) {
-      printUsage(argParser);
+      printUsage(configParser);
       return;
     }
     if (results.flag('version')) {
@@ -66,7 +66,7 @@ void main(List<String> arguments) async {
     // Print usage information if an invalid argument was provided.
     print(e.message);
     print('');
-    printUsage(argParser);
+    printUsage(configParser);
   } catch (e, s) {
     logger.severe("In main: $e !!!", e, s);
   }

@@ -1,10 +1,13 @@
 # FinTS-Cli
-Ein App für die Kommandozeile, um Kontostände und Transaktionen über FinTS abzufragen
+Eine App für die Kommandozeile, um Kontostände und Transaktionen über FinTS abzufragen
 :toc:
 :toc-title: Inhaltsverzeichnis
 :toclevels: 5
 
-Diese App ist eigentlich nur für meine persönlichen Zwecke, könnte aber
+Mit dieser App für die Kommandozeile kann man von Kontostände und Transaktionen von Deutschen 
+Banken über FinTS abfragen.
+
+WARNING: Diese App ist eigentlich nur für meine persönlichen Zwecke, könnte aber
 auch für andere nützlich sein. Mit Nutzung dieser App, erklärt sich der 
 Nutzer damit einverstanden, dass es **sein persönliches Risiko** ist und 
 **ich nicht hafte**.
