@@ -1,35 +1,15 @@
 import 'package:config/config.dart';
 import 'package:fints_cli/config/ft_config.dart';
+import 'package:fints_cli/config/ft_config_parser.dart';
 import 'package:fints_cli/engine/fints_client.dart';
 import 'package:logging/logging.dart';
 
 // Please, set it to the same value as in pubspec.yaml
 const String version = '0.0.2';
 
-ConfigParser buildParser() {
-  return ConfigParser()
-    ..addFlag(
-      'help',
-      abbr: 'h',
-      negatable: false,
-      help: 'Print this usage information.',
-    )
-    ..addFlag(
-      'verbose',
-      abbr: 'v',
-      negatable: false,
-      help: 'Show additional command output.',
-    )
-    ..addFlag(
-      'version',
-      negatable: false,
-      help: 'Print the tool version.',
-    );
-}
-
-void printUsage(ConfigParser argParser) {
+void printUsage() {
   print('Usage: fints_cli <flags> [arguments]');
-  print(argParser.usage);
+  print(parseArgs([]).usage);
 }
 
 void main(List<String> arguments) async {
@@ -39,22 +19,20 @@ void main(List<String> arguments) async {
     );
   });
   final logger = Logger("main");
-  final ConfigParser configParser = buildParser();
+
   try {
-    final  results = configParser.parse(arguments);
-    bool verbose = false;
+    final Configuration<FtOption<dynamic>> config =
+        parseArgs(arguments);
+    final bool verbose = config.value(FtOption.verbose);
 
     // Process the parsed arguments.
-    if (results.flag('help')) {
-      printUsage(configParser);
+    if (config.optionalValue(FtOption.help) ?? false) {
+      printUsage();
       return;
     }
-    if (results.flag('version')) {
+    if (config.value(FtOption.version)) {
       print('fints_cli version: $version');
       return;
-    }
-    if (results.flag('verbose')) {
-      verbose = true;
     }
 
     Logger.root.level = verbose ? Level.ALL : .INFO;
@@ -62,11 +40,11 @@ void main(List<String> arguments) async {
     logger.log(.FINE, "running fints ...");
     await MyFinTs(FtConfig()).run();
     logger.log(.FINE, "done");
-  } on FormatException catch (e) {
+  } on UsageException catch (e) {
     // Print usage information if an invalid argument was provided.
     print(e.message);
     print('');
-    printUsage(configParser);
+    printUsage();
   } catch (e, s) {
     logger.severe("In main: $e !!!", e, s);
   }
