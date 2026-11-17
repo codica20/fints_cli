@@ -1,7 +1,11 @@
 # https://dart.dev/tools/private-files
 # Created by `dart pub`
 .dart_tool/
-.env
-.env.postbank
-.env.dkb
 build/
+
+.env
+.env.*
+!.env.example
+config.yaml
+config.*.yaml
+!config.example.yaml

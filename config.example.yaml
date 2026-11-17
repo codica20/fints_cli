@@ -1,0 +1,7 @@
+# FinTS credentials for Postbank - example for config.yaml
+banking_url: https://xy.beispielbank.de
+blz: "12345678"
+user: name
+pin: password
+product_id: fints_cli
+product_version: "0.0.1"

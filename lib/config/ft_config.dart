@@ -1,14 +1,8 @@
-import 'package:dotenv/dotenv.dart';
+import 'package:config/config.dart';
+import 'package:fints_cli/config/ft_config_parser.dart';
 import 'package:logging/logging.dart';
 
 class FtConfig {
-  static const _bankingUrlKey = "FT_URL";
-  static const _bankCodeKey = "FT_BLZ";
-  static const _userIdKey = "FT_USER";
-  static const _pinKey = "FT_PIN";
-  static const _productIdKey = "FT_PRODUCT_ID";
-  static const _productVersionKey = "FT_PRODUCT_VERSION";
-
   final String bankingUrl;
   final String bankCode;
   final String userId;
@@ -17,34 +11,30 @@ class FtConfig {
   final String productVersion;
 
   static final logger = Logger("FtConfig");
-  new()
-    : bankingUrl = _loadKey(_bankingUrlKey),
-      bankCode = _loadKey(_bankCodeKey),
-      userId = _loadKey(_userIdKey),
-      pin = _loadKey(_pinKey),
-      productId = _loadKey(_productIdKey),
-      productVersion = _loadKey(_productVersionKey);
+  new(List<String> args)
+    : bankingUrl = _load(args, .bankingUrl),
+      bankCode = _load(args, .bankCode),
+      userId = _load(args, .userId),
+      pin = _load(args, .password),
+      productId = _load(args, .productID),
+      productVersion = _load(args, .productVersion);
 
   // throws an Exception if env var for key is not defined.
-  static String _loadKey(String envKey) {
-    final value = _dotenv[envKey];
-    switch (value) {
-      case String():
-        return value;
-      case _:
-        final msg = "Please, set environment var $envKey";
-        logger.severe(msg);
-        throw Exception(msg);
-    }
+  static String _load(
+    List<String> args,
+    FtOption<String> option,
+  ) {
+    final value = _getConfig(args).value(option);
+    return value;
   }
 
   /// Do NOT use this variable! Use _dotenv instead!
-  static DotEnv? _globalDotenv;
+  static Configuration<FtOption<dynamic>>? _parsedConfig;
 
-  static DotEnv get _dotenv {
-    _globalDotenv ??= DotEnv(
-        includePlatformEnvironment: true,
-      )..load();
-    return _globalDotenv!;
+  static Configuration<FtOption<dynamic>> _getConfig(
+    List<String> args,
+  ) {
+    _parsedConfig ??= parseArgs(args);
+    return _parsedConfig!;
   }
 }

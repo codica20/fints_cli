@@ -38,11 +38,11 @@ void main(List<String> arguments) async {
     Logger.root.level = verbose ? Level.ALL : .INFO;
 
     logger.log(.FINE, "running fints ...");
-    await MyFinTs(FtConfig()).run();
+    await MyFinTs(FtConfig(arguments)).run();
     logger.log(.FINE, "done");
   } on UsageException catch (e) {
     // Print usage information if an invalid argument was provided.
-    print(e.message);
+    print("FEHLER: ${e.message}");
     print('');
     printUsage();
   } catch (e, s) {
