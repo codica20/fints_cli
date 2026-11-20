@@ -53,6 +53,13 @@ enum FtOption<V> implements OptionDefinition<V> {
       mandatory: false,
       helpText: "Tan-Methode, z.B. \"BestSign\"",
     ),
+  ),
+  tanMedium(
+    _FtStringOption(
+      argName: "tan_medium",
+      mandatory: false,
+      helpText: "Tan-Medium, z.B. \"MySmartPhone\"",
+    ),
   )
   // configFile(
   //   FileOption(
@@ -69,6 +76,7 @@ enum FtOption<V> implements OptionDefinition<V> {
   final ConfigOptionBase<V> option;
 }
 
+/// parses cli args
 Configuration<FtOption<dynamic>> parseArgs(
   List<String> args,
 ) {

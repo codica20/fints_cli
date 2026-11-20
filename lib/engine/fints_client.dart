@@ -149,6 +149,20 @@ class MyFinTs(final FtConfig config) {
   FutureOr<TanMedium> showMediumPicker(
     List<TanMedium> media,
   ) async {
+    final tanMedium = config.tanMedium;
+    if (tanMedium != null) {
+      final RegExp re = RegExp(tanMedium);
+      return media.firstWhere((m) {
+        final name = m.name;
+        if (name != null) {
+          if (re.hasMatch(name)) return true;
+        }
+        final mobileNr = m.mobileNumber;
+        if (mobileNr != null) return re.hasMatch(mobileNr);
+
+        return false;
+      });
+    }
     _fine("medium picker: $media");
     for (final medium in media) {
       _fine(

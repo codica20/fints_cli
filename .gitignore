@@ -3,6 +3,8 @@
 .dart_tool/
 build/
 
+.vscode/
+
 .env
 .env.*
 !.env.example

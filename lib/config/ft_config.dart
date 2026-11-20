@@ -10,6 +10,7 @@ class FtConfig {
   final String productId;
   final String productVersion;
   final String? tanMethod;
+final String? tanMedium;
 
   static final logger = Logger("FtConfig");
   new(List<String> args)
@@ -19,7 +20,8 @@ class FtConfig {
       pin = _loadString(args, .password),
       productId = _loadString(args, .productID),
       productVersion = _loadString(args, .productVersion),
-      tanMethod = _loadOptionalString(args, .tanMethod);
+      tanMethod = _loadOptionalString(args, .tanMethod),
+      tanMedium=_loadOptionalString(args, .tanMedium);
 
   /// throws an Exception if value for option is not defined.
   static String _loadString(
