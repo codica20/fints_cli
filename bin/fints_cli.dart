@@ -8,7 +8,7 @@ import 'package:logging/logging.dart';
 const String version = '0.0.2';
 
 void printUsage() {
-  print('Usage: fints_cli <flags> [arguments]');
+  print('Aufruf: fints_cli <optionen> ');
   print(parseArgs([]).usage);
 }
 
@@ -42,9 +42,10 @@ void main(List<String> arguments) async {
     logger.log(.FINE, "done");
   } on UsageException catch (e) {
     // Print usage information if an invalid argument was provided.
-    print("FEHLER: ${e.message}");
-    print('');
+
     printUsage();
+    print('');
+    print("FEHLER: ${e.message}");
   } catch (e, s) {
     logger.severe("In main: $e !!!", e, s);
   }

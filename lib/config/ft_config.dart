@@ -9,22 +9,33 @@ class FtConfig {
   final String pin;
   final String productId;
   final String productVersion;
+  final String? tanMethod;
 
   static final logger = Logger("FtConfig");
   new(List<String> args)
-    : bankingUrl = _load(args, .bankingUrl),
-      bankCode = _load(args, .bankCode),
-      userId = _load(args, .userId),
-      pin = _load(args, .password),
-      productId = _load(args, .productID),
-      productVersion = _load(args, .productVersion);
+    : bankingUrl = _loadString(args, .bankingUrl),
+      bankCode = _loadString(args, .bankCode),
+      userId = _loadString(args, .userId),
+      pin = _loadString(args, .password),
+      productId = _loadString(args, .productID),
+      productVersion = _loadString(args, .productVersion),
+      tanMethod = _loadOptionalString(args, .tanMethod);
 
-  // throws an Exception if env var for key is not defined.
-  static String _load(
+  /// throws an Exception if value for option is not defined.
+  static String _loadString(
     List<String> args,
     FtOption<String> option,
   ) {
     final value = _getConfig(args).value(option);
+    return value;
+  }
+
+  /// loads an optional string value or null
+  static String? _loadOptionalString(
+    List<String> args,
+    FtOption<String> option,
+  ) {
+    final value = _getConfig(args).optionalValue(option);
     return value;
   }
 

@@ -133,9 +133,15 @@ class MyFinTs(final FtConfig config) {
   FutureOr<TanMethod> showMethodPicker(
     List<TanMethod> methods,
   ) async {
-    _info("method picker: $methods");
+    final tanMethod = config.tanMethod;
+    if (tanMethod != null) {
+      final RegExp re = RegExp(tanMethod);
+      return methods.firstWhere((m) => re.hasMatch(m.name));
+    }
+    _fine("method picker: $methods");
     final userinput = Menu(methods).choose();
-    _info("Picked: $userinput");
+    print("");
+    _fine("Picked: $userinput");
     final result = userinput.value;
     return result;
   }

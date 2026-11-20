@@ -47,14 +47,21 @@ enum FtOption<V> implements OptionDefinition<V> {
   productVersion(
     _FtStringOption(argName: "product_version"),
   ),
-
-  configFile(
-    FileOption(
-      argName: "config_file",
-      helpText: "Pfad zu einem Konfigurationsdatei (Standard: config.yaml)",
-      // defaultsTo does not work here, because File() is not a const constructor
+  tanMethod(
+    _FtStringOption(
+      argName: "tan_method",
+      mandatory: false,
+      helpText: "Tan-Methode, z.B. \"BestSign\"",
     ),
-  );
+  )
+  // configFile(
+  //   FileOption(
+  //     argName: "config_file",
+  //     helpText: "Pfad zu einem Konfigurationsdatei (Standard: config.yaml)",
+  //     // defaultsTo does not work here, because File() is not a const constructor
+  //   ),
+  //)
+  ;
 
   const FtOption(this.option);
 
