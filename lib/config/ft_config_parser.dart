@@ -1,4 +1,5 @@
 import 'package:config/config.dart';
+import 'package:fints/fints.dart';
 
 enum FtOption<V> implements OptionDefinition<V> {
   help(FlagOption(argName: "help", argAbbrev: "h")),
@@ -68,6 +69,19 @@ enum FtOption<V> implements OptionDefinition<V> {
       mandatory: false,
       helpText: "Konto",
     ),
+  ),
+  lastDays(
+    _FtIntOption(
+      argName: "last_days",
+      helpText: "Wieviel Tage zurück sollen Transaktionen abgeholt werden?",
+    ),
+  ),
+  transactionFormat(
+    _FtEnumOption<TransactionFormat>(
+      argName: "transaction_format",
+      enumParser: EnumParser(TransactionFormat.values),
+      defaultsTo: .auto,
+    ),
   )
   // configFile(
   //   FileOption(
@@ -103,6 +117,42 @@ class _FtStringOption extends StringOption {
     super.argAliases,
     super.helpText,
     super.argAbbrev,
+  }) : super(
+         envName: envName ?? "ft_$argName",
+         configKey: "/$argName",
+       );
+}
+
+class _FtIntOption extends IntOption {
+  const new({
+    required String super.argName,
+    String? envName,
+    // ignore: unused_element_parameter
+    super.mandatory = false,
+    // ignore: unused_element_parameter
+    super.argAliases,
+    super.helpText,
+    // ignore: unused_element_parameter
+    super.argAbbrev,
+  }) : super(
+         envName: envName ?? "ft_$argName",
+         configKey: "/$argName",
+       );
+}
+
+class _FtEnumOption<E extends Enum> extends EnumOption<E> {
+  const new({
+    required String super.argName,
+    required super.enumParser,
+    String? envName,
+    // ignore: unused_element_parameter
+    super.mandatory = false,
+    // ignore: unused_element_parameter
+    super.argAliases,
+    super.helpText,
+    // ignore: unused_element_parameter
+    super.argAbbrev,
+    super.defaultsTo,
   }) : super(
          envName: envName ?? "ft_$argName",
          configKey: "/$argName",

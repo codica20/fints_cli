@@ -96,14 +96,20 @@ class MyFinTs(final FtConfig config) {
         "balance-details: ${balance.booked} ${balance.pending} ${balance.bookedAsOf} ${balance.available} ${balance.creditLine} ${balance.overdraft} ${balance.used} ${balance.bookedAsOfTime} ${balance.productName}",
       );
 
-      const daysMenu = [1, 5, 10, 30, 90, 180];
-      final int days =
-          daysMenu[Menu(
-            daysMenu.map((count) => "Letzte $count Tage"),
-          ).choose().index];
+      int days;
+      if (config.lastDays != null) {
+        days = config.lastDays!;
+      } else {
+        const daysMenu = [1, 5, 10, 30, 90, 180];
+        days =
+            daysMenu[Menu(
+              daysMenu.map((count) => "Letzte $count Tage"),
+            ).choose().index];
+      }
       final transactions = await client.getTransactions(
         account,
         from: DateTime.now().subtract(Duration(days: days)),
+        format: config.transactionFormat,
       );
       _info("transactions: $transactions");
       for (final Transaction transaction in transactions) {

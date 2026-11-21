@@ -1,4 +1,5 @@
 import 'package:config/config.dart';
+import 'package:fints/fints.dart';
 import 'package:fints_cli/config/ft_config_parser.dart';
 import 'package:logging/logging.dart';
 
@@ -10,10 +11,16 @@ class FtConfig {
   final String productId;
   final String productVersion;
   final String? tanMethod;
+
   /// an RegEx matching the tan medium
   final String? tanMedium;
+
   /// an RegEx matching the account name or the account number
   final String? account;
+
+  // for transactions: how many days should we go back in time?
+  final int? lastDays;
+  final TransactionFormat transactionFormat;
 
   static final logger = Logger("FtConfig");
   new(List<String> args)
@@ -25,7 +32,9 @@ class FtConfig {
       productVersion = _loadString(args, .productVersion),
       tanMethod = _loadOptionalString(args, .tanMethod),
       tanMedium = _loadOptionalString(args, .tanMedium),
-      account = _loadOptionalString(args, .account);
+      account = _loadOptionalString(args, .account),
+      lastDays = _loadOptionalInt(args, .lastDays),
+      transactionFormat=_loadEnum(args, .transactionFormat);
 
   /// throws an Exception if value for option is not defined.
   static String _loadString(
@@ -42,6 +51,23 @@ class FtConfig {
     FtOption<String> option,
   ) {
     final value = _getConfig(args).optionalValue(option);
+    return value;
+  }
+
+  /// loads an optional int value or null
+  static int? _loadOptionalInt(
+    List<String> args,
+    FtOption<int> option,
+  ) {
+    final value = _getConfig(args).optionalValue(option);
+    return value;
+  }
+
+  static E _loadEnum<E extends Enum>(
+    List<String> args,
+    FtOption<E> option,
+  ) {
+    final value = _getConfig(args).value(option);
     return value;
   }
 

@@ -5,3 +5,7 @@ user: name
 pin: password
 product_id: fints_cli
 product_version: "0.0.1"
+last_days: 90
+tan_medium: mySmartphone
+tan_method: BestSign
+account: "3.*01"

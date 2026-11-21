@@ -18,10 +18,11 @@ Produktregistrierung erforderlich siehe https://www.fints.org/de/hersteller/prod
 
 ## Benutzung während der Entwicklung
 
-Man muss eine .env anlegen mit den aus link:.env.example[] ersichtlichen Variablen.
+Man kann eine 'config.yaml' anlegen mit den aus link:config.yaml.example[] ersichtlichen Variablen.
+Oder man nutzt die Optionen auf der Kommandozeile.
 
 ```bash
-  dart run bin/fints_cli.dart [--verbose]
+  dart run bin/fints_cli.dart --help
 ```
 
 ## Roadmap
@@ -30,8 +31,6 @@ Man muss eine .env anlegen mit den aus link:.env.example[] ersichtlichen Variabl
   * CSV
   * JSON
   * wahlweise in Datei(en)
-* Nachfragen während des Laufs vermeiden, indem entsprechende Optionen
-  beim Start gesetzt werden
-
+* Umgebungsvariablen statt Setzen von Optionen
 * Wenn die Basis, die Dart-Library https://pub.dev/packages/fints[fints] es unterstützt,
   sollen auch Überweisungen ermöglicht werden (vielleicht auch Lastschriften).
