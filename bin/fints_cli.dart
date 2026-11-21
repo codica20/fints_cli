@@ -2,6 +2,7 @@ import 'package:config/config.dart';
 import 'package:fints_cli/config/ft_config.dart';
 import 'package:fints_cli/config/ft_config_parser.dart';
 import 'package:fints_cli/engine/fints_client.dart';
+import 'package:fints_cli/engine/ft_no_such_account_exception.dart';
 import 'package:logging/logging.dart';
 
 // Please, set it to the same value as in pubspec.yaml
@@ -46,7 +47,22 @@ void main(List<String> arguments) async {
     printUsage();
     print('');
     print("FEHLER: ${e.message}");
+  } on FtNoSuchAccountException catch (e) {
+    print(
+      "Leider kein passendes Konto für ${e.account} gefunden.",
+    );
+    final accounts = e.accounts;
+    if (accounts != null) {
+      print("Folgende Konten sind vorhanden:");
+      for (final a in accounts) {
+        print("${a.accountNumber} (${a.productName})");
+      }
+    }
   } catch (e, s) {
-    logger.severe("In main: $e !!!", e, s);
+    logger.severe(
+      "In main: $e (${e.runtimeType})!!!",
+      e,
+      s,
+    );
   }
 }

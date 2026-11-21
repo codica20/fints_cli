@@ -10,7 +10,10 @@ class FtConfig {
   final String productId;
   final String productVersion;
   final String? tanMethod;
-final String? tanMedium;
+  /// an RegEx matching the tan medium
+  final String? tanMedium;
+  /// an RegEx matching the account name or the account number
+  final String? account;
 
   static final logger = Logger("FtConfig");
   new(List<String> args)
@@ -21,7 +24,8 @@ final String? tanMedium;
       productId = _loadString(args, .productID),
       productVersion = _loadString(args, .productVersion),
       tanMethod = _loadOptionalString(args, .tanMethod),
-      tanMedium=_loadOptionalString(args, .tanMedium);
+      tanMedium = _loadOptionalString(args, .tanMedium),
+      account = _loadOptionalString(args, .account);
 
   /// throws an Exception if value for option is not defined.
   static String _loadString(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cli_menu/cli_menu.dart';
 import 'package:fints/fints.dart';
 import 'package:fints_cli/config/ft_config.dart';
+import 'package:fints_cli/engine/ft_no_such_account_exception.dart';
 import 'package:logging/logging.dart';
 
 class MyFinTs(final FtConfig config) {
@@ -65,7 +66,30 @@ class MyFinTs(final FtConfig config) {
 
     try {
       final accounts = await client.getAccounts();
-      final account = Menu(accounts).choose().value;
+      final argsAccount = config.account;
+
+      Account account;
+      try {
+        account = argsAccount != null
+            ? accounts.firstWhere((a) {
+                final acctMatcher = RegExp(argsAccount);
+                return acctMatcher.hasMatch(
+                      a.productName ?? "",
+                    ) ||
+                    acctMatcher.hasMatch(
+                      a.accountNumber ?? "",
+                    );
+              })
+            : Menu(accounts).choose().value;
+      } on StateError catch (_) {
+        throw FtNoSuchAccountException(
+          argsAccount,
+          accounts,
+        );
+      }
+      _fine(
+        "Picked account: $account ${account.currency} ${account.allowedTransactions}",
+      );
       final balance = await client.getBalance(account);
       _info("balance: $balance");
       _info(

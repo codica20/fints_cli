@@ -60,6 +60,14 @@ enum FtOption<V> implements OptionDefinition<V> {
       mandatory: false,
       helpText: "Tan-Medium, z.B. \"MySmartPhone\"",
     ),
+  ),
+  account(
+    _FtStringOption(
+      argName: "account",
+      argAbbrev: "a",
+      mandatory: false,
+      helpText: "Konto",
+    ),
   )
   // configFile(
   //   FileOption(
@@ -94,6 +102,7 @@ class _FtStringOption extends StringOption {
     super.mandatory = true,
     super.argAliases,
     super.helpText,
+    super.argAbbrev,
   }) : super(
          envName: envName ?? "ft_$argName",
          configKey: "/$argName",
