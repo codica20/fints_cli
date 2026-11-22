@@ -24,7 +24,6 @@ void main(List<String> arguments) async {
   try {
     final Configuration<FtOption<dynamic>> config =
         parseArgs(arguments);
-    final bool verbose = config.value(FtOption.verbose);
 
     // Process the parsed arguments.
     if (config.optionalValue(FtOption.help) ?? false) {
@@ -36,11 +35,12 @@ void main(List<String> arguments) async {
       return;
     }
 
-    Logger.root.level = verbose ? Level.ALL : .INFO;
+    final ftConfig = FtConfig(arguments);
+    Logger.root.level = ftConfig.logLevel;
 
-    logger.log(.FINE, "running fints ...");
-    await MyFinTs(FtConfig(arguments)).run();
-    logger.log(.FINE, "done");
+    logger.log(.FINER, "running fints ...");
+    await MyFinTs(ftConfig).run();
+    logger.log(.FINER, "done");
   } on UsageException catch (e) {
     // Print usage information if an invalid argument was provided.
 

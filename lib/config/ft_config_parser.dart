@@ -1,17 +1,54 @@
 import 'package:config/config.dart';
 import 'package:fints/fints.dart';
 
+const _verbosityGroup = MutuallyExclusive(
+  "Umfang der Ausgabe",
+  mode: .allowDefaults,
+);
+
 enum FtOption<V> implements OptionDefinition<V> {
-  help(FlagOption(argName: "help", argAbbrev: "h")),
+  help(
+    _FtFlagOption(
+      argName: "help",
+      argAbbrev: "h",
+      defaultsTo: false,
+      helpText: "Zeigt Hilfe an",
+    ),
+  ),
+
+  quiet(
+    _FtFlagOption(
+      argName: "quiet",
+      defaultsTo: false,
+      helpText: "Begrenzt Ausgabe auf Minimum.",
+      group: _verbosityGroup,
+    ),
+  ),
   verbose(
-    FlagOption(
+    _FtFlagOption(
       argName: "verbose",
       argAbbrev: "v",
       defaultsTo: false,
+      helpText: "Zeigt mehr Infos",
+      group: _verbosityGroup,
     ),
   ),
+  debug(
+    _FtFlagOption(
+      argName: "debug",
+      defaultsTo: false,
+      helpText:
+          "Erleichtert Debugging durch viele Ausgaben",
+      group: _verbosityGroup,
+    ),
+  ),
+
   version(
-    FlagOption(argName: "version", defaultsTo: false),
+    _FtFlagOption(
+      argName: "version",
+      defaultsTo: false,
+      helpText: "Zeigt Version an",
+    ),
   ),
   bankingUrl(
     _FtStringOption(
@@ -80,6 +117,7 @@ enum FtOption<V> implements OptionDefinition<V> {
     _FtEnumOption<TransactionFormat>(
       argName: "transaction_format",
       enumParser: EnumParser(TransactionFormat.values),
+      helpText: "Welches Format soll vom Server angefordert werden?",
       defaultsTo: .auto,
     ),
   )
@@ -134,6 +172,25 @@ class _FtIntOption extends IntOption {
     super.helpText,
     // ignore: unused_element_parameter
     super.argAbbrev,
+  }) : super(
+         envName: envName ?? "ft_$argName",
+         configKey: "/$argName",
+       );
+}
+
+class _FtFlagOption extends FlagOption {
+  const new({
+    required String super.argName,
+    String? envName,
+    // ignore: unused_element_parameter
+    super.mandatory = false,
+    // ignore: unused_element_parameter
+    super.argAliases,
+    super.helpText,
+    // ignore: unused_element_parameter
+    super.argAbbrev,
+    super.defaultsTo,
+    super.group,
   }) : super(
          envName: envName ?? "ft_$argName",
          configKey: "/$argName",

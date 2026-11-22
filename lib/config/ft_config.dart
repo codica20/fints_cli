@@ -4,6 +4,11 @@ import 'package:fints_cli/config/ft_config_parser.dart';
 import 'package:logging/logging.dart';
 
 class FtConfig {
+  final bool _verbose;
+  final bool _quiet;
+  final bool _debug;
+  final bool help;
+  final bool version;
   final String bankingUrl;
   final String bankCode;
   final String userId;
@@ -22,9 +27,18 @@ class FtConfig {
   final int? lastDays;
   final TransactionFormat transactionFormat;
 
+  Level get logLevel {
+    if (_quiet) return .WARNING;
+    if (_verbose) return .FINE;
+    if (_debug) return .ALL;
+    return .INFO;
+  }
+
   static final logger = Logger("FtConfig");
   new(List<String> args)
-    : bankingUrl = _loadString(args, .bankingUrl),
+    : help = _loadBoolean(args, .help),
+      version = _loadBoolean(args, .version),
+      bankingUrl = _loadString(args, .bankingUrl),
       bankCode = _loadString(args, .bankCode),
       userId = _loadString(args, .userId),
       pin = _loadString(args, .password),
@@ -34,12 +48,27 @@ class FtConfig {
       tanMedium = _loadOptionalString(args, .tanMedium),
       account = _loadOptionalString(args, .account),
       lastDays = _loadOptionalInt(args, .lastDays),
-      transactionFormat=_loadEnum(args, .transactionFormat);
+      transactionFormat = _loadEnum(
+        args,
+        .transactionFormat,
+      ),
+      _verbose = _loadBoolean(args, .verbose),
+      _quiet = _loadBoolean(args, .quiet),
+      _debug = _loadBoolean(args, .debug);
 
   /// throws an Exception if value for option is not defined.
   static String _loadString(
     List<String> args,
     FtOption<String> option,
+  ) {
+    final value = _getConfig(args).value(option);
+    return value;
+  }
+
+  /// throws an Exception if value for option is not defined.
+  static bool _loadBoolean(
+    List<String> args,
+    FtOption<bool> option,
   ) {
     final value = _getConfig(args).value(option);
     return value;
