@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cli_menu/cli_menu.dart';
 import 'package:fints/fints.dart';
 import 'package:fints_cli/config/ft_config.dart';
 import 'package:fints_cli/engine/ft_no_such_account_exception.dart';
+import 'package:fints_cli/output/table_data_model.dart';
 import 'package:logging/logging.dart';
 
 class MyFinTs(final FtConfig config) {
@@ -65,6 +67,12 @@ class MyFinTs(final FtConfig config) {
     );
 
     try {
+      if (config.getTarget != .transactions) {
+        throw UnimplementedError(
+          "Nur Transaktionsliste ist bisher umgesetzt.",
+        ); // TODO
+      }
+
       final accounts = await client.getAccounts();
       final argsAccount = config.account;
 
@@ -112,10 +120,53 @@ class MyFinTs(final FtConfig config) {
         format: config.transactionFormat,
       );
       _info("transactions: $transactions");
+      final model = TableData(
+        headers: const [
+          TableColumn("Referenz"),
+          TableColumn("PrimaNota"),
+          TableColumn("gebucht"),
+          TableColumn("Zahlungspartner"),
+          TableColumn("Verwendungszweck"),
+          TableColumn("Endtoend"),
+          TableColumn("Purpose"),
+          TableColumn("Betrag"),
+          TableColumn("Währung"),
+          TableColumn("valutiert"),
+          TableColumn("Andere IBAN"),
+          TableColumn("Andere BIC"),
+          TableColumn("Ursprünglicher Betrag"),
+          TableColumn("Ursprüngliche Währung"),
+          TableColumn("Status"),
+        ],
+      );
       for (final Transaction transaction in transactions) {
         _info(
           "${transaction.bookingDate} ${transaction.amount} ${transaction.bookingText} ${transaction.counterpartyName} ${transaction.counterpartyIban} ${transaction.originalAmount} ${transaction.isPending ? "Pending" : "-"} ${transaction.purpose} ${transaction.purposeCodes} ${transaction.valueDate}",
         );
+        final row = TableRow([
+          TableStringValue(transaction.bankReference),
+          TableStringValue(transaction.primaNota),
+          TableDateValue(transaction.bookingDate),
+          TableStringValue(transaction.counterpartyName),
+          TableStringValue(transaction.bookingText),
+          TableStringValue(transaction.purpose),
+          TableStringValue(transaction.endToEndId),
+          TableNumValue(transaction.amount.value),
+          TableStringValue(transaction.amount.currency),
+          TableDateValue(transaction.valueDate),
+          TableStringValue(transaction.counterpartyIban),
+          TableStringValue(transaction.counterpartyBic),
+          TableNumValue(transaction.originalAmount?.value),
+          TableStringValue(
+            transaction.originalAmount?.currency,
+          ),
+          TableStringValue(
+            transaction.status == .booked
+                ? "gebucht"
+                : "wartend",
+          ),
+        ]);
+        model.rows.add(row);
       }
       final depot = accounts
           .where(
@@ -133,6 +184,8 @@ class MyFinTs(final FtConfig config) {
           );
         }
       }
+      final encoder = JsonEncoder.withIndent("  ");
+      print(encoder.convert(model));
     } on FinTsLoginDataChangedException catch (e, s) {
       _error(e, s);
       // Store e.userId, e.customerId or e.loginName and build a new client with them.

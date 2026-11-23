@@ -8,4 +8,5 @@ product_version: "0.0.1"
 last_days: 90
 tan_medium: mySmartphone
 tan_method: BestSign
+transaction_format: mt940
 account: "3.*01"

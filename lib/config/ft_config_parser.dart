@@ -120,6 +120,14 @@ enum FtOption<V> implements OptionDefinition<V> {
       helpText: "Welches Format soll vom Server angefordert werden?",
       defaultsTo: .auto,
     ),
+  ),
+  get(
+    _FtEnumOption<GetTarget>(
+      argName: "get",
+      enumParser: EnumParser(GetTarget.values),
+      helpText: "Welche Liste soll abgeholt werden?",
+      defaultsTo: .transactions
+    ),
   )
   // configFile(
   //   FileOption(
@@ -134,6 +142,15 @@ enum FtOption<V> implements OptionDefinition<V> {
 
   @override
   final ConfigOptionBase<V> option;
+}
+
+enum GetTarget {
+  accounts,
+  balance,
+  transactions,
+  holdings,
+  tanMedia,
+  tanMethods,
 }
 
 /// parses cli args

@@ -25,11 +25,18 @@ Oder man nutzt die Optionen auf der Kommandozeile.
   dart run bin/fints_cli.dart --help
 ```
 
+Mit dem Paket https://jqlang.org/manual/[jq] und der Kommandozeilenoption `--quiet` kann man sich die 
+Transaktionen schön anzeigen lassen oder weiterbearbeiten.
+
+```bash
+  dart run bin/fints_cli.dart --account extra  --transaction_format mt940 --quiet --last_days 5 | jq .
+```
+
 ## Roadmap
 
 * Schönerer Output
   * CSV
-  * JSON
+  * JSON (auch für andere Listen als Transaktionen)
   * wahlweise in Datei(en)
 * Umgebungsvariablen statt Setzen von Optionen
 * Wenn die Basis, die Dart-Library https://pub.dev/packages/fints[fints] es unterstützt,

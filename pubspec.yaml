@@ -2,7 +2,7 @@ name: fints_cli
 description: get balances, transactions and holdings via FinTS
 
 # Please, set it to the same value as in bin/fints_cli.dart
-version: 0.0.2
+version: 0.1.0
 
 environment:
   sdk: ^3.13.7
@@ -12,8 +12,9 @@ dependencies:
   cli_menu: ^0.4.0+1
   config: ^0.10.0
   fints: ^0.4.0
+  intl: ^0.20.3
   logging: ^1.3.0
 
 dev_dependencies:
   lints: ^6.0.0
-  test: ^1.25.6
+  test: ^1.33.0

@@ -26,6 +26,7 @@ class FtConfig {
   // for transactions: how many days should we go back in time?
   final int? lastDays;
   final TransactionFormat transactionFormat;
+  final GetTarget getTarget;
 
   Level get logLevel {
     if (_quiet) return .WARNING;
@@ -54,7 +55,8 @@ class FtConfig {
       ),
       _verbose = _loadBoolean(args, .verbose),
       _quiet = _loadBoolean(args, .quiet),
-      _debug = _loadBoolean(args, .debug);
+      _debug = _loadBoolean(args, .debug),
+      getTarget = _loadEnum(args, .get);
 
   /// throws an Exception if value for option is not defined.
   static String _loadString(
