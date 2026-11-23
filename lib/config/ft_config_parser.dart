@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:config/config.dart';
 import 'package:fints/fints.dart';
+import 'package:logging/logging.dart';
 
 const _verbosityGroup = MutuallyExclusive(
   "Umfang der Ausgabe",
@@ -126,7 +129,7 @@ enum FtOption<V> implements OptionDefinition<V> {
       argName: "get",
       enumParser: EnumParser(GetTarget.values),
       helpText: "Welche Liste soll abgeholt werden?",
-      defaultsTo: .transactions
+      defaultsTo: .transactions,
     ),
   )
   // configFile(
@@ -238,10 +241,16 @@ class _FtFileConfigBroker implements ConfigurationBroker {
 
   @override
   String? valueOrNull(String key, Configuration cfg) {
-    // By lazy-loading the config, the file path can depend on another option
+    const fileName = "config.yaml";
+    if (!File(fileName).existsSync()) {
+      Logger("FtFileConfigBroker")
+          .fine("No $fileName config file found.");
+      return null;
+    }
+    // By lazy-loading the config, the file path can depend on another option (does NOT work yet!!!)
     _configSource ??= ConfigurationParser.fromFile(
       //      cfg.optionalValue(FtOption.configFile)?.path ??
-      "config.yaml",
+      fileName,
     );
     final value = _configSource?.valueOrNull(key);
     return value is String ? value : null;

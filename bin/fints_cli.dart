@@ -10,7 +10,23 @@ const String version = '0.1.0';
 
 void printUsage() {
   print('Aufruf: fints_cli <optionen> ');
-  print(parseArgs([]).usage);
+  print(
+    parseArgs(const [
+      // dummy mandatory options
+      "--banking_url",
+      "http",
+      "--blz",
+      "20010010",
+      "--user",
+      "USER",
+      "--pin",
+      "PIN",
+      "--product_id",
+      "PRODUCT_ID",
+      "--product_version",
+      "V0.0.0",
+    ]).usage,
+  );
 }
 
 void main(List<String> arguments) async {
@@ -45,8 +61,8 @@ void main(List<String> arguments) async {
     // Print usage information if an invalid argument was provided.
 
     printUsage();
-    print('');
-    print("FEHLER: ${e.message}");
+    print('\n');
+    print(e.message);
   } on FtNoSuchAccountException catch (e) {
     print(
       "Leider kein passendes Konto für ${e.account} gefunden.",
