@@ -1,0 +1,30 @@
+Aufruf: fints_cli <optionen> 
+-h, --[no-]help                                                           Zeigt Hilfe an
+    --[no-]version                                                        Zeigt Version an
+    --banking_url (mandatory)                                             Die FinTS/HBCI-URL der Bank
+    --blz (mandatory)                                                     Die Bankleitzahl der Bank (üblicherweise ab der 3. Stelle der IBAN)
+    --user (mandatory)                                                    
+    --pin (mandatory)                                                     Die FinTS/HBCI-PIN (üblicherweise ein Passwort)
+    --product_id (mandatory)                                              Die Product-ID wird von der DK bereitgestellt.
+    --product_version (mandatory)                                         
+    --tan_method                                                          Tan-Methode, z.B. "BestSign"
+    --tan_medium                                                          Tan-Medium, z.B. "MySmartPhone"
+-a, --account                                                             Konto
+    --last_days=<integer>                                                 Wieviel Tage zurück sollen Transaktionen abgeholt werden?
+    --transaction_format=<auto|mt940|camt>                                Welches Format soll vom Server angefordert werden?
+                                                                          (defaults to "auto")
+    --get=<accounts|balance|transactions|holdings|tanMedia|tanMethods>    Welche Liste soll abgeholt werden?
+                                                                          (defaults to "transactions")
+
+Umfang der Ausgabe
+    --[no-]quiet                                                          Begrenzt Ausgabe auf Minimum.
+-v, --[no-]verbose                                                        Zeigt mehr Infos
+    --[no-]debug                                                          Erleichtert Debugging durch viele Ausgaben
+
+
+Option `banking_url` is mandatory.
+Option `blz` is mandatory.
+Option `user` is mandatory.
+Option `pin` is mandatory.
+Option `product_id` is mandatory.
+Option `product_version` is mandatory.

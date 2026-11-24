@@ -16,6 +16,8 @@ Bisher funktioniert die Abfrage bei meinem Postbank-Depot und bei meinem Postban
 Bei meinem Postbank-Girokonto funktioniert es dagegen nicht. Bei der DKB ist zwingend eine
 Produktregistrierung erforderlich siehe https://www.fints.org/de/hersteller/produktregistrierung.
 
+
+
 ## Benutzung während der Entwicklung
 
 Man kann eine 'config.yaml' anlegen mit den aus link:config.yaml.example[] ersichtlichen Variablen.
@@ -32,12 +34,24 @@ Transaktionen schön anzeigen lassen oder weiterbearbeiten.
   dart run bin/fints_cli.dart --account extra  --transaction_format mt940 --quiet --last_days 5 | jq .
 ```
 
+## Einzelne Kommandozeilenoptionen
+
+Siehe link:docs/helptext[]
+
+```
+include::docs/helptext[]
+``` 
+
 ## Roadmap
 
 * Schönerer Output
-  * CSV
-  * JSON (auch für andere Listen als Transaktionen)
-  * wahlweise in Datei(en)
-* Umgebungsvariablen statt Setzen von Optionen
+  
+  - CSV
+  - JSON (auch für andere Listen als Transaktionen)
+  - wahlweise in Datei(en)
+
+* Freie Wahl der config.yaml
+* Setzen von Optionen mittels Umgebungsvariablen
 * Wenn die Basis, die Dart-Library https://pub.dev/packages/fints[fints] es unterstützt,
   sollen auch Überweisungen ermöglicht werden (vielleicht auch Lastschriften).
+* Zusammenführen von CSV-/JSON-Dateien

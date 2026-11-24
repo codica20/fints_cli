@@ -6,7 +6,7 @@ import 'package:fints_cli/engine/ft_no_such_account_exception.dart';
 import 'package:logging/logging.dart';
 
 // Please, set it to the same value as in pubspec.yaml
-const String version = '0.1.0';
+const String version = '0.1.1';
 
 void printUsage() {
   print('Aufruf: fints_cli <optionen> ');
